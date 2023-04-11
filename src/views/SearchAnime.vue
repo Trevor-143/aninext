@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="results">
-            <h3 class="hResults"></h3>
+            <h3 class="hResults">Did you search for {{ text }}?</h3>
             <div class="rList">
             <router-link :to="'/about/'+anime.mal_id" v-for="anime in foundAnime" :key="anime.mal_id">
                 <img :src="anime.images.webp.image_url" :alt="anime.title">
@@ -13,11 +13,42 @@
         </div>
     </div>
 </template>
+
 <script>
+import { ref, defineProps, onBeforeMount } from "vue";
+import { useRoute } from "vue-router";
+
 export default {
-    name: 'SearchAnime'
+    name: 'SearchAnime',
+    props: {
+        text: {
+            type: String,
+            required: true
+        }
+    },
+    setup(props) {
+        const foundAnime = ref([])
+        const resultsHeading = ref('')
+        // const gotText = 'text'
+        onBeforeMount(() => {
+            fetch(`https://api.jikan.moe/v4/anime?q=${props.text}`)
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data)
+                foundAnime.value = data.data
+            })
+        })
+
+
+        return {
+            foundAnime,
+            // gotText,
+            text: props.text
+        }
+    }
 }
 </script>
+
 <style>
     
 </style>

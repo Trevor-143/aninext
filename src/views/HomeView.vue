@@ -231,9 +231,7 @@ export default {
     border-radius: 0.5rem;
     margin-right: 0.7rem;
   }
-
-
-
+  .randomTags h4:nth-child()
 
   .Anime {
     margin-bottom: 1rem;

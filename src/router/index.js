@@ -14,10 +14,16 @@ const routes = [
     name: 'AboutAnime',
     component: AboutAnime
   },
+  // {
+  //   path: '/SearchAnime',
+  //   name: 'SearchAnime',
+  //   component: SearchAnime
+  // },
   {
     path: '/SearchAnime',
     name: 'SearchAnime',
-    component: SearchAnime
+    component: SearchAnime,
+    props: (route) => ({ text: route.query.text} )
   },
   {
     path: '/about',
@@ -35,3 +41,4 @@ const router = createRouter({
 })
 
 export default router
+
