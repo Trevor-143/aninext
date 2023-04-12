@@ -46,6 +46,16 @@
       </div>
     </div>
 
+    <div class="charas">
+      <h3 class="h1">Top Anime Characters</h3>
+      <section>
+        <div v-for="chara in topCharacters" :key="chara.mal_id">
+          <img :src="chara.images.webp.image_url" :alt="chara.name">
+          <h3>{{ chara.name }}</h3>
+        </div>
+      </section>
+    </div>
+
     <div class="Anime">
       <h2>Looking forward to..</h2>
       <div class="AnimeList">
@@ -66,7 +76,7 @@
 
 <script>
 // @ is an alias to /src
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, onMounted } from "vue";
 
 export default {
   name: 'HomeView',
@@ -78,6 +88,7 @@ export default {
     const randomAnime = ref([])
     const random = ref([])
     const upcoming = ref([])
+    const topCharacters = ref([])
 
     onBeforeMount(() => {
       fetch(`https://api.jikan.moe/v4/top/anime`)
@@ -100,12 +111,23 @@ export default {
         // console.log(random.value)
       })
     })
+    onMounted(() => {
+      setTimeout(() => {
+        fetch(`https://api.jikan.moe/v4/top/characters`)
+        .then(res => res.json())
+        .then(data => {
+          topCharacters.value = data.data
+          console.log(topCharacters.value)
+        })
+      }, 2000);
+    })
     
     
     return {
       topAnime,
       random,
       upcoming,
+      topCharacters
     }
   }
 }
@@ -231,7 +253,11 @@ export default {
     border-radius: 0.5rem;
     margin-right: 0.7rem;
   }
-  .randomTags h4:nth-child()
+  .randomTags h4:nth-child(4) {
+    background-color: #000;
+    color: #fff;
+    border: solid 2px #fff;
+  }
 
   .Anime {
     margin-bottom: 1rem;
@@ -325,5 +351,32 @@ export default {
     color: #000000;
     border-radius: 0.5rem;
     font-size: 12px;
+  }
+  .h1 {
+    font-size: 17px;
+    margin-top: 2rem;
+    color: #fff;
+    margin-left: 1rem;
+  }
+  .charas section {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+  }
+  .charas section::-webkit-scrollbar {
+    display: none;
+  }
+  .charas div {
+    margin: 0.5rem;
+    width: 100px;
+    color: #c7c7c7;
+    text-align: center;
+    font-size: 13px;
+  }
+  .charas div img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 1rem;
   }
 </style>

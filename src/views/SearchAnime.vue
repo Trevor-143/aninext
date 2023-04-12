@@ -16,7 +16,6 @@
 
 <script>
 import { ref, defineProps, onBeforeMount } from "vue";
-import { useRoute } from "vue-router";
 
 export default {
     name: 'SearchAnime',
@@ -24,6 +23,16 @@ export default {
         text: {
             type: String,
             required: true
+        }
+    },
+    watch: {
+        text(newValue, oldValue) {
+            this.refreshView()
+        }
+    },
+    methods: {
+        refreshView() {
+            this.text = this.text
         }
     },
     setup(props) {
