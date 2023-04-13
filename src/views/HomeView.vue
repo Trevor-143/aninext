@@ -46,16 +46,6 @@
       </div>
     </div>
 
-    <div class="charas">
-      <h3 class="h1">Top Anime Characters</h3>
-      <section>
-        <div v-for="chara in topCharacters" :key="chara.mal_id">
-          <img :src="chara.images.webp.image_url" :alt="chara.name">
-          <h3>{{ chara.name }}</h3>
-        </div>
-      </section>
-    </div>
-
     <div class="Anime">
       <h2>Looking forward to..</h2>
       <div class="AnimeList">
@@ -69,6 +59,16 @@
           </div>
         </router-link>
       </div>
+    </div>
+
+    <div class="charas">
+      <h3 class="h1">Top Anime Characters</h3>
+      <section>
+        <router-link :to="'/character/' + chara.mal_id " v-for="chara in topCharacters" :key="chara.mal_id">
+          <img :src="chara.images.webp.image_url" :alt="chara.name">
+          <h3>{{ chara.name }}</h3>
+        </router-link>
+      </section>
     </div>
 
   </div>
@@ -139,7 +139,7 @@ export default {
     position: relative;
     margin-top: 1rem;
     border-radius: 1rem;
-    overflow: hidden;
+    /* overflow: hidden; */
     max-height: 300px;
     
   }
@@ -147,6 +147,7 @@ export default {
     width: 100%;
     max-height: 300px;
     object-fit: cover;
+    border-radius: 1rem;
   }
   .random a {
 
@@ -161,7 +162,7 @@ export default {
     left: 0;
     right: 0;
     padding: 1rem;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, .4), rgba(0, 0, 0, 1));
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, .4));
   }
   .random a img {
     border-radius: 1rem;
@@ -366,14 +367,15 @@ export default {
   .charas section::-webkit-scrollbar {
     display: none;
   }
-  .charas div {
+  .charas a {
     margin: 0.5rem;
     width: 100px;
     color: #c7c7c7;
     text-align: center;
     font-size: 13px;
+    text-decoration: none;
   }
-  .charas div img {
+  .charas a img {
     width: 100px;
     height: 150px;
     object-fit: cover;
