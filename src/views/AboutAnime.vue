@@ -28,3 +28,9 @@
         }
     }
 </script>
+
+<style scoped>
+    h3 {
+        color: #fff;
+    }
+</style>

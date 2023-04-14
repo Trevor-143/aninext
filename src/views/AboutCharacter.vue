@@ -5,39 +5,43 @@
             <div class="cIntroName">
                 <h3>{{ characterInfo.name }}</h3>
                 <h4>{{ characterInfo.name_kanji }}</h4>
-                <p>From {{ bestAnime }}</p>
+                <p class="from"></p>
             </div>
         </div>
+
         <div class="cAbout">
-            <h3>About {{characterInfo.name}}</h3>
+            <h3 class="aca"></h3>
             <p>{{characterInfo.about}}</p>
         </div>
+
         <div class="cAnime">
-            <h2>{{characterInfo.name}}'s anime list</h2>
+            <h2 class="cAnimeH"></h2>
             <div class="cAnimeList">
-                <div v-for="item in anime" :key="item.mal_id">
-                    <img :src="item.anime.images.webp.image_url" :alt="item.title">
+                <router-link :to="'/about/'+item.anime.mal_id"  class="inner" v-for="item in anime" :key="item.mal_id">
+                    <img :src="item.anime.images.jpg.large_image_url" :alt="item.title">
                     <div class="mini">
                         <h3>{{item.anime.title}}</h3>
-                        <h3>{{item.role}}</h3>
+                        <h3 class="place">{{item.role}} role</h3>
                     </div>
-                </div>
+                </router-link>
             </div>
         </div>
+
         <div class="cManga">
-            <h2>{{characterInfo.name}}'s manga list</h2>
+            <h2 class="cMangaH"></h2>
             <div class="cMangaList">
-                <div v-for="item in manga" :key="item.mal_id">
-                    <img :src="item.manga.images.webp.image_url" :alt="item.title">
+                <div class="inner" v-for="item in manga" :key="item.mal_id">
+                    <img :src="item.manga.images.jpg.large_image_url" :alt="item.title">
                     <div class="mini">
                         <h3>{{item.manga.title}}</h3>
-                        <h3>{{item.role}}</h3>
+                        <h3 class="placen">{{item.role}} role</h3>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="cVoice">
-            <h1>{{ characterInfo.name }}' voice actors.</h1>
+            <h1 class="cVoiceH"></h1>
             <div class="cVoices">
                 <div class="man" v-for="item in voices" :key="item.mal_id">
                     <img :src="item.person.images.jpg.image_url" :alt="item.person.name">
@@ -78,6 +82,20 @@ export default {
 
                 console.log(bestAnime.value)
                 console.log(characterInfo.value)
+
+                if (characterInfo.value != null) {
+                    document.querySelector('.from').innerHTML = `From ${bestAnime.value}`
+                    document.querySelector('.aca').innerHTML = `About ${characterInfo.value.name}`
+                }
+                if (anime.value != null) {
+                    document.querySelector('.cAnimeH').innerHTML = `${characterInfo.value.name}'s anime list`
+                }
+                if (manga.value != null) {
+                    document.querySelector('.cMangaH').innerHTML = `${characterInfo.value.name}'s manga list`
+                }
+                if (voices.value != null) {
+                    document.querySelector('.cVoiceH').innerHTML = `${characterInfo.value.name}'s voice actors.`
+                }
             })
         })
         return {
@@ -104,10 +122,13 @@ export default {
     .cIntro img {
         max-width: 200px;
         max-height: 250px;
+        min-height: 200px;
         width: 100%;
         height: 100%;
         object-fit: cover;
         border-radius: 1.5rem;
+        border: #fff solid 3px;
+        background-color: #e0e0e0;
     }
     .cIntroName {
         padding: 2rem;
@@ -133,28 +154,37 @@ export default {
         overflow: hidden;
         display: grid;
         gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    }
+    .cAnimeList a, .cMangaList a {
+        text-decoration: none;
     }
     .cAnimeList img, .cMangaList img {
+        max-width: 40%;
         width: 100%;
-        height: 250px;
+        height: 110px;
         object-fit: cover;
         border-radius: 1rem;
+        border: #fff solid 2px; 
     }
-    .cAnimeList div, .cMangaList div {
-        position: relative;
+    .cAnimeList .inner, .cMangaList .inner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+
+        padding: 0.5rem;
+        background-color: #1d1d1d;
+        
+        border-radius: 1rem;
     }
     .cAnimeList .mini , .cMangaList .mini {
-        text-align: center;
-        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        font-size: 13px;
         padding: 0.5rem;
-        background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, .3));
-        border-radius: 1rem;
-        border-bottom: 2px solid #1d1d1d;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        width: 100%;
     }
     .mini h3:nth-child(1) {
         display: -webkit-box;
@@ -162,14 +192,17 @@ export default {
         -webkit-line-clamp: 2;
         -line-clamp: 2;
         -webkit-box-orient: vertical;
+        font-size: 12px;
+        text-align: left;
     }
     .mini h3:nth-child(2) {
+        padding: 0.3rem 0.5rem;
         background-color: #fff;
         color: #000;
-        padding: 0.3rem 0.5rem;
-        width: fit-content;
         border-radius: 0.5rem;
-        margin: .3rem auto;
+        width: fit-content;
+        margin-top: 0.5rem;
+        font-size: 10px;
     }
     .cVoice {
         margin: 2rem 0;

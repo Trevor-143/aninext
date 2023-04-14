@@ -15,12 +15,12 @@
     </form>
   </nav>
   <router-view/>
-  <MainFooter />
+  <MainFooter v-if="footer"/>
 </template>
 
 <script>
   import MainFooter from "@/components/MainFooter"
-  import { ref } from "vue"
+  import { ref, onBeforeMount } from "vue"
   // import { useRoute } from 'vue-router'
 
   export default {
@@ -29,8 +29,13 @@
     },
     data() {
       return {
-        
+        footer: false
       }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.footer = true
+      }, 5000);
     },
     setup() {
       const searchText = ref('')
@@ -53,6 +58,32 @@
     box-sizing: border-box;
     font-family: 'poppins', sans-serif;
     /* outline: 1px red solid; */
+  }
+
+  /*------------for the scrollbar-------------*/
+  /* hide the scrollbar track */
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  /* style the scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 15px;
+    border: 8px solid #000;
+    /* border-color: transparent; */
+  }
+  
+  /* set the width and height of the scrollbar thumb */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #333;
+  }
+  
+  /* make the scrollbar float */
+  ::-webkit-scrollbar {
+    width: 1.5rem;
+    height: 10px;
+    background-color: transparent;
   }
 
   body {

@@ -3,9 +3,9 @@
   <div class="home">
 
     <div class="random">
-      <img class="backImg" :src="random.trailer.images.maximum_image_url" :alt="random.title">
+      <img class="backImg" :src="randomImgURL" :alt="random.title">
       <router-link :to="'/about/'+random.mal_id" class="randomAnime">
-        <img :src="random.images.webp.image_url" :alt="random.title">
+        <img :src="random.images.jpg.image_url" :alt="random.title">
         <div class="randomSide" id="firstSide">
           <h3>{{ random.title }}</h3>
           <p>{{ random.synopsis }}</p>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="Anime">
-      <h2>The Anime to watch</h2>
+      <h2 class="animeHead"></h2>
       <div class="AnimeList">
         <router-link :to = "'/about/'+ anime.mal_id" class="animeListItem" v-for="anime in topAnime" :key="anime.mal_id">
           <img :src="anime.images.webp.image_url" :alt="anime.title">
@@ -47,7 +47,7 @@
     </div>
 
     <div class="Anime">
-      <h2>Looking forward to..</h2>
+      <h2 class="wait"></h2>
       <div class="AnimeList">
         <router-link :to = "'/about/'+ anime.mal_id" class="animeListItem" v-for="anime in upcoming" :key="anime.mal_id">
           <img :src="anime.images.webp.image_url" :alt="anime.title">
@@ -62,7 +62,7 @@
     </div>
 
     <div class="charas">
-      <h3 class="h1">Top Anime Characters</h3>
+      <h3 class="h1"></h3>
       <section>
         <router-link :to="'/character/' + chara.mal_id " v-for="chara in topCharacters" :key="chara.mal_id">
           <img :src="chara.images.webp.image_url" :alt="chara.name">
@@ -85,31 +85,49 @@ export default {
   },
   setup() {
     const topAnime = ref([])
+    const randomImgURL = ref('') 
     const randomAnime = ref([])
     const random = ref([])
     const upcoming = ref([])
     const topCharacters = ref([])
+    
 
     onBeforeMount(() => {
-      fetch(`https://api.jikan.moe/v4/top/anime`)
-      .then(res => res.json())
-      .then(data => {
-        // console.log(data)
-        topAnime.value = data.data
-      })
-      fetch(`https://api.jikan.moe/v4/seasons/upcoming`)
-      .then(res => res.json())
-      .then(data => {
-        // console.log(data)
-        upcoming.value = data.data
-      })
-      fetch(`https://api.jikan.moe/v4/top/anime`)
-      .then(resp => resp.json())
-      .then(data => {
-        randomAnime.value = Math.floor(Math.random() * (data.data.length))
-        random.value = data.data[randomAnime.value]
-        // console.log(random.value)
-      })
+      setTimeout(() => {
+        fetch(`https://api.jikan.moe/v4/top/anime`)
+        .then(resp => resp.json())
+        .then(data => {
+          randomAnime.value = Math.floor(Math.random() * (data.data.length))
+          random.value = data.data[randomAnime.value]
+          randomImgURL.value = data.data[randomAnime.value].trailer.images.maximum_image_url
+          // console.log(random.value)
+        })
+      }, 10);
+
+      setTimeout(() => {
+        fetch(`https://api.jikan.moe/v4/top/anime`)
+        .then(res => res.json())
+        .then(data => {
+          // console.log(data)
+          topAnime.value = data.data
+          if(topAnime.value != null) {
+            document.querySelector('.animeHead').innerHTML = "Anime to watch"
+          }
+        })
+      }, 1000)
+
+      setTimeout(() => {
+        fetch(`https://api.jikan.moe/v4/seasons/upcoming`)
+        .then(res => res.json())
+        .then(data => {
+          // console.log(data)
+          upcoming.value = data.data
+          if(upcoming.value != null) {
+            document.querySelector('.wait').innerHTML = "looking forwarch to.."
+          }
+        })
+      }, 2000)
+      
     })
     onMounted(() => {
       setTimeout(() => {
@@ -117,9 +135,12 @@ export default {
         .then(res => res.json())
         .then(data => {
           topCharacters.value = data.data
-          console.log(topCharacters.value)
+          // console.log(topCharacters.value)
+          if(topCharacters.value != null) {
+            document.querySelector('.h1').innerHTML = "top characters"
+          }
         })
-      }, 2000);
+      }, 3000);
     })
     
     
@@ -127,7 +148,8 @@ export default {
       topAnime,
       random,
       upcoming,
-      topCharacters
+      topCharacters,
+      randomImgURL
     }
   }
 }
@@ -141,13 +163,17 @@ export default {
     border-radius: 1rem;
     /* overflow: hidden; */
     max-height: 300px;
+    min-height: 300px;
+    height: 100%;
     
   }
   .backImg {
     width: 100%;
+    height: 100%;
     max-height: 300px;
     object-fit: cover;
     border-radius: 1rem;
+    height: 100%;
   }
   .random a {
 
@@ -167,6 +193,8 @@ export default {
   .random a img {
     border-radius: 1rem;
     height: 90%;
+    min-width: 100px;
+    min-height: 140px;
   }
   #side {
     display: none;
@@ -376,9 +404,10 @@ export default {
     text-decoration: none;
   }
   .charas a img {
-    width: 100px;
-    height: 150px;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
-    border-radius: 1rem;
+    border-radius: 50%;
+    /* border: #ffffff solid 2px; */
   }
 </style>
