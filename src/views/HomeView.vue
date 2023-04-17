@@ -17,7 +17,6 @@
           </div>
         </div>
       </router-link>
-      
     </div>
 
     <div class="randomSide" id="side">
@@ -71,6 +70,19 @@
       </section>
     </div>
 
+    <div class="mProd">
+      <h3>Popular Producers</h3>
+      <div class="producers">
+        <a :href="producer.url" class="producer" v-for="producer in allProducers" :key="producer.mal_id">
+          <img :src="producer.images.jpg.image_url" :alt="producer.titles[0].title">
+          <div>
+            <h3 class="name"> {{producer.titles[0].title}} </h3>
+            <p> {{producer.about}} </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -90,6 +102,7 @@ export default {
     const random = ref([])
     const upcoming = ref([])
     const topCharacters = ref([])
+    const allProducers = ref([])
     
 
     onBeforeMount(() => {
@@ -140,6 +153,14 @@ export default {
             document.querySelector('.h1').innerHTML = "top characters"
           }
         })
+      }, 3000)
+      setTimeout(() => {
+        fetch(`https://api.jikan.moe/v4/producers`)
+        .then(response => response.json())
+        .then( data => {
+          console.log(data.data)
+          allProducers.value = data.data
+        })
       }, 3000);
     })
     
@@ -149,7 +170,8 @@ export default {
       random,
       upcoming,
       topCharacters,
-      randomImgURL
+      randomImgURL,
+      allProducers
     }
   }
 }
@@ -179,9 +201,9 @@ export default {
 
     text-decoration: none;
     color: #fff;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     position: absolute;
     top: 0;
     bottom: 0;
@@ -189,6 +211,29 @@ export default {
     right: 0;
     padding: 1rem;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, .4));
+  }
+  .random a img {
+    margin: auto;
+  }
+  @media(min-width:1000px) {
+    #firstSide {
+      grid-column: span 4;
+    }
+  }
+  @media(min-width:750px) {
+    #firstSide {
+      grid-column: span 3;
+    }
+  }
+  @media(min-width:730px) {
+    #firstSide {
+      grid-column: span 2;
+    }
+  }
+  @media(min-width:700px) {
+    #firstSide {
+      grid-column: span 1;
+    }
   }
   .random a img {
     border-radius: 1rem;
@@ -199,6 +244,7 @@ export default {
   #side {
     display: none;
   }
+
 
   @media (max-width: 700px) {
     #app {
@@ -212,6 +258,7 @@ export default {
       /* margin: 1rem; */
     }
     #side {
+      margin: 1rem 0;
       display: flex;
       width: 100%;
       /* padding: 1rem; */
@@ -227,7 +274,7 @@ export default {
             -line-clamp: 2;
       -webkit-box-orient: vertical;
       font-size: 13px;
-      margin: 0;
+      margin: 1rem 0;
     }
 
     #side h3, #side p {
@@ -396,18 +443,68 @@ export default {
     display: none;
   }
   .charas a {
-    margin: 0.5rem;
-    width: 100px;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    width: fit-content;
     color: #c7c7c7;
     text-align: center;
     font-size: 13px;
     text-decoration: none;
+    background-color: #1d1d1d;
+    padding: 1rem;
+    border-radius: 1rem;
   }
   .charas a img {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 50%;
-    /* border: #ffffff solid 2px; */
+    border-radius: 1rem;
+    border: #c7c7c7 solid 2px;
+  }
+  .mProd {
+    color: #fff;
+    margin-top: 2rem;
+  }
+  .mProd h3 {
+    margin-left: 1rem;
+  }
+  .mProd a {
+    text-decoration: none;
+    color: #fff;
+  }
+  .producers {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+  .producer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+    filter: brightness(65%);
+  }
+  .producer {
+    border-radius: 1rem;
+    /* padding: 0.5rem; */
+    position: relative;
+  }
+  .producer p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -line-clamp: 3;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+  }
+  .producer div {
+    padding: 0.5rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 1rem;
+    background-color: #1d1d1d;
+    margin: 0.5rem;
   }
 </style>
