@@ -5,10 +5,10 @@
     <div class="random">
       <img class="backImg" :src="randomImgURL" :alt="random.title">
       <router-link :to="'/about/'+random.mal_id" class="randomAnime">
-        <img :src="random.images.jpg.image_url" :alt="random.title">
+        <img :src="random.images.jpg.image_url" :alt="random.title" class="innerImg">
         <div class="randomSide" id="firstSide">
           <h3>{{ random.title }}</h3>
-          <p>{{ random.synopsis }}</p>
+          <p class="aboutP">{{ random.synopsis }}</p>
           <div class="randomTags">
             <h4>{{ random.episodes }} episodes</h4>
             <h4>{{ random.score }}/10 score</h4>
@@ -17,17 +17,6 @@
           </div>
         </div>
       </router-link>
-    </div>
-
-    <div class="randomSide" id="side">
-      <h3>{{ random.title }}</h3>
-      <p>{{ random.synopsis }}</p>
-      <div class="randomTags">
-        <h4>{{ random.episodes }} episodes</h4>
-        <h4>{{ random.score }}/10 score</h4>
-        <h4>{{ random.rating }}</h4>
-        <h4>From {{ random.source }}</h4>
-      </div>
     </div>
 
     <div class="Anime">
@@ -45,6 +34,16 @@
       </div>
     </div>
 
+    <div class="charas">
+      <h3 class="h1"></h3>
+      <section>
+        <router-link :to="'/character/' + chara.mal_id " v-for="chara in topCharacters" :key="chara.mal_id">
+          <img :src="chara.images.webp.image_url" :alt="chara.name">
+          <h3>{{ chara.name }}</h3>
+        </router-link>
+      </section>
+    </div>
+
     <div class="Anime">
       <h2 class="wait"></h2>
       <div class="AnimeList">
@@ -57,29 +56,6 @@
             <h4>{{ anime.aired.string }}</h4>
           </div>
         </router-link>
-      </div>
-    </div>
-
-    <div class="charas">
-      <h3 class="h1"></h3>
-      <section>
-        <router-link :to="'/character/' + chara.mal_id " v-for="chara in topCharacters" :key="chara.mal_id">
-          <img :src="chara.images.webp.image_url" :alt="chara.name">
-          <h3>{{ chara.name }}</h3>
-        </router-link>
-      </section>
-    </div>
-
-    <div class="mProd">
-      <h3>Popular Producers</h3>
-      <div class="producers">
-        <a :href="producer.url" class="producer" v-for="producer in allProducers" :key="producer.mal_id">
-          <img :src="producer.images.jpg.image_url" :alt="producer.titles[0].title">
-          <div>
-            <h3 class="name"> {{producer.titles[0].title}} </h3>
-            <p> {{producer.about}} </p>
-          </div>
-        </a>
       </div>
     </div>
 
@@ -179,161 +155,97 @@ export default {
 
 <style>
   .random {
-    width: 100%;
     position: relative;
+    min-height: 350px;
+    max-height: 350px;
     margin-top: 1rem;
     border-radius: 1rem;
-    /* overflow: hidden; */
-    max-height: 300px;
-    min-height: 300px;
-    height: 100%;
-    
   }
-  .backImg {
+  .random .backImg {
     width: 100%;
     height: 100%;
-    max-height: 300px;
+    min-height: 350px;
     object-fit: cover;
+    max-height: 350px;
     border-radius: 1rem;
-    height: 100%;
   }
-  .random a {
-
-    text-decoration: none;
-    color: #fff;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  .randomAnime {
     position: absolute;
     top: 0;
-    bottom: 0;
-    left: 0;
     right: 0;
+    left: 0;
+    bottom: 0;
+
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    text-decoration: none;
+    color: #fff;
     padding: 1rem;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, .4));
+
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.2));
   }
-  .random a img {
-    margin: auto;
+  .innerImg {
+    border-radius: 1rem;
+    height: 90%;
+    object-fit: cover;
+    margin: auto 0;
   }
-  @media(min-width:1000px) {
-    #firstSide {
-      grid-column: span 4;
-    }
+  .randomSide {
+    grid-column: span 3;
+    margin: auto 0;
   }
-  @media(min-width:750px) {
-    #firstSide {
+  @media (max-width:1200px) {
+    .randomSide {
       grid-column: span 3;
     }
   }
-  @media(min-width:730px) {
-    #firstSide {
+  @media (min-width:700px) {
+    .randomSide {
       grid-column: span 2;
     }
   }
-  @media(min-width:700px) {
-    #firstSide {
+  @media(min-width:700px) and (max-width:800px) {
+    .randomSide {
       grid-column: span 1;
     }
   }
-  .random a img {
-    border-radius: 1rem;
-    height: 90%;
-    min-width: 100px;
-    min-height: 140px;
-  }
-  #side {
-    display: none;
-  }
-
-
-  @media (max-width: 700px) {
-    #app {
-      margin: 0 1rem;
-    }
-    #firstSide {
-      display: none;
-    }
+  @media (max-width:700px) {
     .random {
-      width: 100%;
-      /* margin: 1rem; */
+      min-height: 600px;
     }
-    #side {
-      margin: 1rem 0;
-      display: flex;
-      width: 100%;
-      /* padding: 1rem; */
-    }
-    #side .randomSide {
-      margin: 0;
-    }
-    #side p {
-      /* padding: 0.5rem 0; */
-      display: -webkit-box;
-      overflow: hidden;
-      -webkit-line-clamp: 2;
-            -line-clamp: 2;
-      -webkit-box-orient: vertical;
-      font-size: 13px;
-      margin: 1rem 0;
-    }
-
-    #side h3, #side p {
-      color: #fff;
-    }
-    #side .randomTags {
-      padding-top: 0.5rem;
-    }
-    .random a img {
-      max-width: 200px;
+    .random .backImg {
+      min-height: 600px;
     }
   }
-  .randomSide {
-    display: flex;
-    flex-direction: column;
-    /* min-width: 250px; */
-    max-width: 800px;
-    width: 100%;
-  }
-  .randomSide p {
+  .aboutP {
     display: -webkit-box;
     overflow: hidden;
-    -webkit-line-clamp: 3;
-          -line-clamp: 3;
+    -webkit-line-clamp: 4;
+    -line-clamp: 4;
     -webkit-box-orient: vertical;
-    font-size: 13px;
     margin: 1rem 0;
-
-  }
-  #firstSide {
-    padding: 1.5rem;
+    font-size: 15px;
+    color: #e2e2e2;
   }
   .randomTags {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-X: auto;
+    overflow: auto;
+    margin-top: 1rem;
   }
-  .ramdomTags::-webkit-scrollbar {
+  .randomTags::-webkit-scrollbar {
     display: none;
   }
   .randomTags h4 {
-    width: fit-content;
     padding: 0.3rem 0.5rem;
-    display: flex;
-    white-space: nowrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
     background-color: #fff;
     color: #000;
     border-radius: 0.5rem;
-    margin-right: 0.7rem;
+    margin-right: 0.5rem;
+    white-space: nowrap;
   }
-  .randomTags h4:nth-child(4) {
-    background-color: #000;
-    color: #fff;
-    border: solid 2px #fff;
-  }
+
 
   .Anime {
     margin-bottom: 1rem;

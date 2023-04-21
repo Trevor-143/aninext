@@ -461,9 +461,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        border-radius: 1rem;
     }
     iframe {
         width: 100%;
+        border-radius: 1rem;
     }
     .gallary {
         display: flex;
